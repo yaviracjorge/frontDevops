@@ -1,0 +1,71 @@
+.home-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 10%;
+    min-height: 80vh;
+    background-color: var(--surface-ground); /* Usa el tema de PrimeNG */
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 50%;
+    padding-right: 2rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-color-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.cta-button {
+    background-color: var(--primary-color);
+    color: var(--primary-color-text);
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bold;
+}
+
+.cta-button:hover {
+    background-color: var(--primary-600);
+}
+
+.hero-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Diseño responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+    .home-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 5%;
+    }
+    .hero-content {
+        max-width: 100%;
+        padding-right: 0;
+        margin-bottom: 3rem;
+    }
+}

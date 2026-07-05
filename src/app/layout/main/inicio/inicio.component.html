@@ -1,0 +1,50 @@
+<div class="inicio">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-6">
+            <h1></h1>
+            <h2></h2>
+         </div>
+      </div>
+      
+      <!-- Botón Volver en la parte superior izquierda -->
+      <div class="back-container">
+          <button type="button" class="btn-volver" (click)="paginaPrincipal()">
+             <i class="pi pi-arrow-left"></i> Volver
+          </button>
+      </div>
+
+      <div class="login">
+        <form class="custom-form">
+          <h1 class="form-title">Login</h1>
+          
+          <input
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="Email"
+            required="required"
+            class="modern-input"
+          />
+          <input
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="Password"
+            required="required"
+            class="modern-input"
+          />
+          
+          <!-- Contenedor para alinear los botones principales -->
+          <div class="form-actions">
+            <button type="button" class="btn-primary" (click)="login()">Iniciar sesión</button>
+            <button type="button" class="btn-secondary" (click)="register()">Registrarse</button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="errorMsg" class="floating-alert">
+        {{ errorMsg }}
+      </div>
+   </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="productos-dashboard">
+  <!-- Cabecera y Botones Principales -->
+  <div class="header-card">
+    <div class="header-info">
+      <h1 class="page-title">Inventario de Productos</h1>
+      <p class="page-subtitle">Gestiona, edita y elimina tu producto.</p>
+    </div>
+    <div class="button-container">
+      <button pButton label="Crear Producto" icon="pi pi-plus" (click)="showCreateDialog = true" class="p-button-success"></button>
+      <button pButton label="Cargar Productos" icon="pi pi-refresh" (click)="loadProductos()" class="p-button-info p-button-outlined"></button>
+    </div>
+  </div>
+
+  <!-- Diálogo Modal (Crear Producto) -->
+  <p-dialog [modal]="true" [(visible)]="showCreateDialog" [style]="{ width: '45rem' }" header="Detalles del Producto" [draggable]="false" styleClass="custom-dialog">
+    
+    <div class="form-grid">
+      <!-- Nombre (Ocupa toda la fila) -->
+      <div class="form-field full-width">
+        <label for="name" class="form-label">Nombre del Producto</label>
+        <input pInputText id="name" class="w-full" [(ngModel)]="product.name" placeholder="Ej. Tomates frescos" />
+      </div>
+
+      <!-- Precio y Cantidad -->
+      <div class="form-field">
+        <label for="price" class="form-label">Precio ($)</label>
+        <p-inputnumber [(ngModel)]="product.price" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [useGrouping]="false" class="w-full" styleClass="w-full"></p-inputnumber>
+      </div>
+
+      <div class="form-field flex-center">
+        <label for="quantity" class="form-label text-center w-full">Cantidad</label>
+        <p-knob type="number" id="quantity" [(ngModel)]="product.quantity" [size]="80"></p-knob>
+      </div>
+
+      <!-- Fecha y Tipo -->
+      <div class="form-field">
+        <label class="form-label">Fecha de Ingreso</label>
+        <p-datepicker [(ngModel)]="datavalue" styleClass="w-full" [appendTo]="'body'"></p-datepicker>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label">Tipo de Producto</label>
+        <p-select [options]="productos" [(ngModel)]="tipo" optionLabel="name" placeholder="Selecciona el tipo" styleClass="w-full"></p-select>
+      </div>
+
+      <!-- Clasificación y Opciones Extra -->
+      <div class="form-field">
+        <label class="form-label">Clasificación</label>
+        <div class="radio-group">
+            <div class="radio-item">
+                <p-radiobutton name="tipo" value="organico" [(ngModel)]="ingredient" inputId="ingredient1"></p-radiobutton>
+                <label for="ingredient1">Orgánico</label>
+            </div>
+            <div class="radio-item">
+                <p-radiobutton name="tipo" value="no organico" [(ngModel)]="ingredient" inputId="ingredient2"></p-radiobutton>
+                <label for="ingredient2">No Orgánico</label>
+            </div>
+        </div>
+      </div>
+
+      <div class="form-field flex-row-space">
+        <div class="mini-field">
+          <label class="form-label">Rating</label>
+          <p-rating [(ngModel)]="product.rating"></p-rating>
+        </div>
+        <div class="mini-field">
+          <label class="form-label">Color</label>
+          <p-colorpicker [(ngModel)]="color"></p-colorpicker>
+        </div>
+        <div class="mini-field">
+          <label class="form-label">Activo</label>
+          <p-checkbox [(ngModel)]="product.state" binary="true"></p-checkbox> 
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones del Modal -->
+    <ng-template pTemplate="footer">
+      <div class="dialog-buttons">
+        <p-button label="Cancelar" icon="pi pi-times" severity="secondary" [text]="true" (click)="showCreateDialog = false"></p-button>
+        <p-button label="Guardar Producto" icon="pi pi-check" (click)="create()"></p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Tabla de Productos -->
+  <div class="table-card">
+    <p-table [value]="productList" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '60rem' }" class="p-datatable-sm custom-table">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 25%">Nombre</th>
+          <th style="width: 12%">Precio</th>
+          <th style="width: 12%">Cantidad</th>
+          <th style="width: 10%">Total</th>
+          <th style="width: 10%" class="text-center">Estado</th>
+          <th style="width: 15%" class="text-center">Rating</th>
+          <th style="width: 16%" class="text-center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <!-- Edición en línea ajustada para que ocupe bien el espacio -->
+          <td><input pInputText [(ngModel)]="product.name" class="w-full inline-input" /></td>
+          <td><input pInputText type="number" [(ngModel)]="product.price" class="w-full inline-input" /></td>
+          <td><input pInputText type="number" [(ngModel)]="product.quantity" class="w-full inline-input" /></td>
+          
+          <td class="font-bold text-primary">{{ product.price * product.quantity | currency:'USD' }}</td>
+          
+          <td class="text-center"><p-checkbox [(ngModel)]="product.state" binary="true"></p-checkbox></td>
+          <td class="text-center"><input pInputText type="number" [(ngModel)]="product.rating" max="5" class="w-full inline-input text-center" /></td>
+          
+          <td class="text-center action-buttons">
+            <button pButton type="button" icon="pi pi-save" class="p-button-rounded p-button-text p-button-success" (click)="updateProduct(product)" pTooltip="Actualizar"></button>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="deleteProduct(product.id!)" pTooltip="Eliminar"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr><td colspan="7" class="text-center p-4 text-gray-500">No hay productos para mostrar.</td></tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
