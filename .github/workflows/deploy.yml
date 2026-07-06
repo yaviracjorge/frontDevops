@@ -53,6 +53,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  
       - name: Copiar docker-compose.yml al VPS
         uses: appleboy/scp-action@v1
         with:
