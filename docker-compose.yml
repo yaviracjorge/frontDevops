@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  practica-1-frontend:
+    image: ghcr.io/yaviracjorge/angularapp:latest
+    container_name: practica-1-frontend
+    restart: unless-stopped
+    networks:
+      - traefik-publik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-publik"
+
+      # Redirección HTTP -> HTTPS
+      - "traefik.http.routers.practica-1.entrypoints=web"
+      - "traefik.http.routers.practica-1.rule=Host(`corella.byronrm.com`)"
+      - "traefik.http.middlewares.practica-1-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.practica-1.middlewares=practica-1-https-redirect"
+
+      # Router HTTPS
+      - "traefik.http.routers.practica-1-secure.entrypoints=websecure"
+      - "traefik.http.routers.practica-1-secure.rule=Host(`corella.byronrm.com`)"
+      - "traefik.http.routers.practica-1-secure.tls=true"
+      - "traefik.http.routers.practica-1-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.practica-1-secure.service=practica-1"
+
+      - "traefik.http.services.practica-1.loadbalancer.server.port=80"
+
+networks:
+  traefik-network:
+    external: true
