@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: angularapp
+  IMAGE_NAME: ${{ github.repository_owner }}/angularapp
 
 jobs:
   build-and-push:
