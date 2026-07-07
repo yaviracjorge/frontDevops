@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000/api' // URL por defecto del servidor local de Laravel
+  apiUrl: 'https://backcorella.byronrm.com/api' // URL por defecto del servidor local de Laravel
 };
